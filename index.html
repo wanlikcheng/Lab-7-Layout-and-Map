@@ -24,24 +24,25 @@
     <!-- Load Javascript files -->
     <!-- <script defer src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.1.1/d3.min.js"></script> -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <script src="https://unpkg.com/topojson@3"></script>
+
 
     <!-- Your code -->
     <script defer src="script.js"></script>
-    <script src="https://unpkg.com/topojson@3"></script>
     <!-- <script defer src="example.js"></script> -->
 
     <body>
-        <p></p>
     </body>
     <!-- container for areachart -->
     <div class="container">
         <h1>
             Airport Connections
         </h1>
-        <div class = "same-line"><input type = "radio" id = "force" name = "selection" value = "Force"> Force</div>
-        <div class = "same-line"><input type = "radio" id = "map" name = "selection" value = "Map"> Map</div>
+        <div class = "same-line"><input type = "radio" id = "force" name = "type" value = "Force" checked = "checked"> Force</div>
+        <div class = "same-line"><input type = "radio" id = "map" name = "type" value = "Map"> Map</div>
         
-        <div class="node-diagram">
+        <div class = "node-diagram">
             <!-- You will append a SVG here-->
         </div>
     </div>
