@@ -1,0 +1,10 @@
+h1 {
+    font-style: italic;
+    color: blue;
+}
+
+.same-line {
+    display: inline-block;
+    padding-left: 20px;
+
+}
