@@ -35,13 +35,14 @@ d3.json("airports.json", d3.autoType)
             var path = d3.geoPath()
                 .projection(projection); 
 
-            svg.selectAll("path")
+            var map = svg.selectAll("path")
                 .data(features)
                 .enter()
                 .append("path")
-                .attr("d", path);
+                .attr("d", path)
+                .attr("opacity", 0);
                 
-            svg.append("path")
+            map.append("path")
                 .datum(topojson.mesh(worldmap, worldmap.objects.countries))
                 .attr("d", path)
                 .attr('fill', 'none')
@@ -65,9 +66,9 @@ d3.json("airports.json", d3.autoType)
             var force = d3.forceSimulation(data.nodes)
                 .force("link", d3.forceLink(data.links))
                 .force("charge", d3.forceManyBody())
-                .force("x", d3.forceX())
-                .force("y", d3.forceY())
-                .force("center", d3.forceCenter().x(width/2).y(height/2))
+                .force("x", d3.forceX(width / 2))
+                .force("y", d3.forceY(height / 2))
+                // .force("center", d3.forceCenter().x(width/2).y(height/2))
                 .force("collide", d3.forceCollide().radius(function(d) {
                         return d.r;
                     })
@@ -134,15 +135,41 @@ d3.json("airports.json", d3.autoType)
             function switchLayout() {
                 if (visType === "Map") {
                         // stop the simulation
+                        force.stop();
+
                         // set the positions of links and nodes based on geo-coordinates
+                        nodes.transition().duration(500)
+                            .attr("cx", function(d) { 
+                                    d.x = projection([d.longitude, d.latitude])[0]; 
+                                    return d.x;
+                                })
+                            .attr("cy", function(d) { 
+                                d.y = projection([d.longitude, d.latitude])[1]; 
+                                return d.y;
+                            })
+                        
+                        edges.transition().duration(500)
+                            .attr("x1", function(d) { return d.source.x; })
+                            .attr("y1", function(d) { return d.source.y; })
+                            .attr("x2", function(d) { return d.target.x; })
+                            .attr("y2", function(d) { return d.target.y; });
+                        
+
                         // set the map opacity to 1
-                        console.log("visType", visType);
+                        map.transition()
+                            .duration(1000)
+                            .attr("opacity", 1);
 
                     } else { 
                         // force layout
+
                         // restart the simulation
+                        force.alpha(1.0).restart();
+
                         // set the map opacity to 0
-                        console.log("visType", visType);   
+                        map.transition()
+                            .duration(1000)
+                            .attr("opacity", 0);
                     }
                 }
         })
